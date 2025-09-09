@@ -266,6 +266,89 @@ void RooSpinZero_7DComplex_withAccep_HVV::evaluatePolarizationTerms(
   }
 }
 
+void RooSpinZero_7DComplex_withAccep_HVV::evaluatePolarizationTerms(
+  Double_t& A00term, Double_t& Appterm, Double_t& Ammterm,
+  Double_t& A0pterm, Double_t& A0mterm, Double_t& Apmterm
+) const{
+  Double_t mV;
+  getMVGamV(&mV);
+  bool isZZ = (mV >= 90.);
+  Double_t epsilon=1e-15;
+  Double_t m1_=m1; if (Vdecay1==RooSpin::kVdecayType_GammaOnshell) m1_=0;
+  Double_t m2_=m2; if (Vdecay2==RooSpin::kVdecayType_GammaOnshell) m2_=0;
+  if (
+    (m1_+m2_)>m12 ||
+    (isZZ && Vdecay1==Vdecay2 && ZZ4fOrdering && fabs(m2_-mV)<fabs(m1_-mV) && Vdecay2!=RooSpin::kVdecayType_GammaOnshell) ||
+    (m1_<=0. && Vdecay1!=RooSpin::kVdecayType_GammaOnshell) ||
+    (m2_<=0. && Vdecay2!=RooSpin::kVdecayType_GammaOnshell)
+    ) return void(A00term = Appterm = Ammterm = A0pterm = A0mterm = Apmterm = epsilon / 6);
+
+  Int_t code = intCodeStart;
+  if (Vdecay1==RooSpin::kVdecayType_GammaOnshell || Vdecay2==RooSpin::kVdecayType_GammaOnshell){
+    code *= prime_Phi;
+    if (Vdecay1==RooSpin::kVdecayType_GammaOnshell) code *= prime_h1;
+    if (Vdecay2==RooSpin::kVdecayType_GammaOnshell) code *= prime_h2;
+    if (Vdecay1==RooSpin::kVdecayType_GammaOnshell && Vdecay2==RooSpin::kVdecayType_GammaOnshell) code *= prime_Phi1;
+  }
+
+  Double_t betaValSq = (1.-(pow(m1_-m2_, 2)/pow(m12, 2)))*(1.-(pow(m1_+m2_, 2)/pow(m12, 2)));
+  if (betaValSq<=0.) return void(A00term = Appterm = Ammterm = A0pterm = A0mterm = Apmterm = epsilon / 6);
+  Double_t betaVal = sqrt(betaValSq);
+
+  Double_t term1Coeff = 1;
+  Double_t term2Coeff = 1;
+  if (Vdecay1!=RooSpin::kVdecayType_GammaOnshell) term1Coeff = 2.*m1_*GeVunit; // dm**2 = 2m dm
+  if (Vdecay2!=RooSpin::kVdecayType_GammaOnshell) term2Coeff = 2.*m2_*GeVunit;
+
+  for (int VGammaVpmode1=0; VGammaVpmode1<=2; VGammaVpmode1++){
+    for (int VGammaVpmode2=0; VGammaVpmode2<=2; VGammaVpmode2++){
+      if (!(
+        (VGammaVpmode1==1 || Vdecay1!=RooSpin::kVdecayType_GammaOnshell)
+        &&
+        (VGammaVpmode2==1 || Vdecay2!=RooSpin::kVdecayType_GammaOnshell)
+        )
+        ||
+        (VGammaVpmode1==1 && VGammaVpmode2==2) || (VGammaVpmode1==2 && VGammaVpmode2==1)
+        ||
+        !computeNeededAmplitude(VGammaVpmode1, VGammaVpmode2)
+        ) continue;
+      Double_t val_A00=0, val_App=0, val_Amm=0, val_A0p=0, val_A0m=0, val_Apm=0;
+      evaluatePolarizationTerms(val_A00, val_App, val_Amm, val_A0p, val_A0m, val_Apm, code, VGammaVpmode1, VGammaVpmode2);
+      A00term += val_A00;
+      Appterm += val_App;
+      Ammterm += val_Amm;
+      A0pterm += val_A0p;
+      A0mterm += val_A0m;
+      Apmterm += val_Apm;
+    }
+  }
+  bool hasNaN = false;
+  for(auto *term : {&A00term, &Appterm, &Ammterm, &A0pterm, &A0mterm, &Apmterm}) {
+    *term *= betaVal*term1Coeff*term2Coeff
+      *(1+aM1*m1_+bM1*m1_*m1_+cM1*m1_*m1_*m1_+dM1*m1_*m1_*m1_*m1_)
+      *(1+aM2*m2_+bM2*m2_*m2_+cM2*m2_*m2_*m2_+dM2*m2_*m2_*m2_*m2_);
+    if(term != term) hasNaN = true;
+  }
+
+  if (hasNaN){
+    MELAout << "Evaluate NaN at "
+      << "h1=" << h1 << '\t'
+      << "h2=" << h2 << '\t'
+      << "hs=" << hs << '\t'
+      << "Phi1=" << Phi1 << '\t'
+      << "Phi=" << Phi << '\t'
+      << "m1=" << m1 << '\t'
+      << "m2=" << m2 << '\t'
+      << "m12=" << m12 << '\t'
+      << endl;
+    MELAout << "Possible sources:\n"
+      << "betaVal=" << betaVal << '\t'
+      << "term1Coeff=" << term1Coeff << '\t'
+      << "term2Coeff=" << term2Coeff
+      << endl;
+  }
+}
+
 Double_t RooSpinZero_7DComplex_withAccep_HVV::evaluate() const{
   Double_t mV;
   getMVGamV(&mV);

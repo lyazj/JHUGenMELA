@@ -33,6 +33,7 @@ Please adhere to the following coding conventions:
 #include "TUtilHelpers.hh"
 #include "MELAStreamHelpers.hh"
 #include "MadMela.h"
+#include "RooSpinZero_7DComplex_withAccep_HVV.h"
 
 #include "RooMsgService.h"
 #include "TFile.h"
@@ -2845,3 +2846,34 @@ void Mela::computeDijetConvBW(float& prob, bool useTrueBW){
   reset_CandRef();
 }
 
+
+void Mela::computeA(double &A00, double &App, double &Amm, double &A0p, double &A0m, double &Apm){
+  float mZZ=0, mZ1=0, mZ2=0, costheta1=0, costheta2=0, Phi=0, costhetastar=0, Phi1=0;
+  computeDecayAngles(mZZ, mZ1, mZ2, costheta1, costheta2, Phi, costhetastar, Phi1);
+  costhetastar_rrv->setVal(costhetastar);
+  costheta1_rrv->setVal(costheta1);
+  costheta2_rrv->setVal(costheta2);
+  phi_rrv->setVal(Phi);
+  phi1_rrv->setVal(Phi1);
+  z1mass_rrv->setVal(mZ1);
+  z2mass_rrv->setVal(mZ2);
+  mzz_rrv->setVal(mZZ);
+  Y_rrv->setConstant(true); // Just to avoid integrating over this variable unnecessarily
+
+  RooSpin::modelMeasurables measurables_;
+  measurables_.h1 = costheta1_rrv;
+  measurables_.h2 = costheta2_rrv;
+  measurables_.Phi = phi_rrv;
+  measurables_.m1 = z1mass_rrv;
+  measurables_.m2 = z2mass_rrv;
+  measurables_.m12 = mzz_rrv;
+  measurables_.hs = costhetastar_rrv;
+  measurables_.Phi1 = phi1_rrv;
+  measurables_.Y = Y_rrv;
+
+  auto *pdf = (RooSpinZero_7DComplex_withAccep_HVV *)ggSpin0Model->getPDF();
+  pdf->setProxies(measurables_);
+  pdf->evaluatePolarizationTerms(A00, App, Amm, A0p, A0m, Apm);
+
+  Y_rrv->setConstant(false);
+}

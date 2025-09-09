@@ -1109,6 +1109,8 @@ public:
 
   static void cleanLinkedFiles();
 
+  void computeA(double &A00, double &App, double &Amm, double &A0p, double &A0m, double &Apm);
+
 protected:
   /********************/
   /*** Data members ***/

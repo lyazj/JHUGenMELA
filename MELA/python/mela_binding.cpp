@@ -229,6 +229,19 @@ float getPAux(Mela& mela) {
     return result;
 }
 
+array<double, 6> computeA(Mela& mela) {
+    array<double, 6> result;
+    mela.computeA(
+        result[0],
+        result[1],
+        result[2],
+        result[3],
+        result[4],
+        result[5]
+    );
+    return result;
+}
+
 /// @ingroup ReferenceGroup
 /// @brief the analog of Mela::computeDecayAngles
 /// @param mela Mela object instance (for python function calling using obj.<function>) 
@@ -1087,6 +1100,7 @@ PYBIND11_MODULE(Mela, m) {
         .def("cleanLinkedFiles", &Mela::cleanLinkedFiles)
         .def("calculate4Momentum", &Mela::calculate4Momentum)
 
+        .def("computeA", &computeA)
         .def("computeDecayAngles", &computeDecayAngles)
         .def("computeVBFAngles", &computeVBFAngles)
         .def("computeVBFAngles_ComplexBoost", &computeVBFAngles_ComplexBoost)

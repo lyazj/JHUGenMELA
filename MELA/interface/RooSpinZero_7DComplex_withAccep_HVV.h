@@ -64,6 +64,13 @@ public:
 
   void setZZ4fOrdering(Bool_t flag=true);
 
+  void evaluatePolarizationTerms(
+    Double_t& A00term, Double_t& Appterm, Double_t& Ammterm,
+    Double_t& A0pterm, Double_t& A0mterm, Double_t& Apmterm
+  ) const;
+
+  using RooSpinZero::setProxies;
+
 protected:
 
   // acceptance parameters
