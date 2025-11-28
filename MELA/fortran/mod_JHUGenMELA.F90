@@ -122,9 +122,9 @@ end subroutine
 
 subroutine SetSpinZeroVVCouplings(vvcoupl, vvpcoupl, vpvpcoupl, cqsq, Lambda_qsq, useWWcoupl)
    implicit none
-   complex(8), intent(in) :: vvcoupl(39)
-   complex(8), intent(in) :: vvpcoupl(39)
-   complex(8), intent(in) :: vpvpcoupl(39)
+   complex(8), intent(in) :: vvcoupl(43)
+   complex(8), intent(in) :: vvpcoupl(43)
+   complex(8), intent(in) :: vpvpcoupl(43)
    integer, intent(in) :: cqsq(3)
    real(8), intent(in) :: Lambda_qsq(1:3,1:4)
    logical, intent(in) :: useWWcoupl
@@ -196,6 +196,11 @@ subroutine SetSpinZeroVVCouplings(vvcoupl, vvpcoupl, vpvpcoupl, cqsq, Lambda_qsq
       ghz3_prime7  = vvcoupl(37)
       ghz4_prime6  = vvcoupl(38)
       ghz4_prime7  = vvcoupl(39)
+
+      ghz1_aux =  vvcoupl(40)
+      ghz2_aux =  vvcoupl(41)
+      ghz3_aux =  vvcoupl(42)
+      ghz4_aux =  vvcoupl(43)
 
 
       ghzzp1 =  vvpcoupl(1)

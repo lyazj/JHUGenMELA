@@ -98,7 +98,12 @@ namespace{
     gHIGGS_VV_4_PRIME6, /*!< `ghz4_prime6` (Value=37) */
     gHIGGS_VV_4_PRIME7, /*!< `ghz4_prime6` (Value=38) */
 
-    SIZE_HVV /*!<  The size of the array   (Value=39) */
+    gHIGGS_VV_1_aux, /*!< auxiliary `ghz1` (Value=39) */
+    gHIGGS_VV_2_aux, /*!< auxiliary `ghz2` (Value=40) */
+    gHIGGS_VV_3_aux, /*!< auxiliary `ghz3` (Value=41) */
+    gHIGGS_VV_4_aux, /*!< auxiliary `ghz4` (Value=42) */
+
+    SIZE_HVV /*!<  The size of the array   (Value=43) */
   };
 
   /**

@@ -3830,6 +3830,10 @@ void TUtil::SetMCFMSpinZeroCouplings(bool useBSM, SpinZeroCouplings const* Hcoup
       spinzerohiggs_anomcoupl_.ghz2[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_2][im];
       spinzerohiggs_anomcoupl_.ghz3[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_3][im];
       spinzerohiggs_anomcoupl_.ghz4[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_4][im];
+      spinzerohiggs_anomcoupl_.ghz1_aux[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_1_aux][im];
+      spinzerohiggs_anomcoupl_.ghz2_aux[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_2_aux][im];
+      spinzerohiggs_anomcoupl_.ghz3_aux[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_3_aux][im];
+      spinzerohiggs_anomcoupl_.ghz4_aux[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_4_aux][im];
       spinzerohiggs_anomcoupl_.ghz1_prime[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_1_PRIME][im];
       spinzerohiggs_anomcoupl_.ghz1_prime2[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_1_PRIME2][im];
       spinzerohiggs_anomcoupl_.ghz1_prime3[im] = (Hcouplings->Hzzcoupl)[gHIGGS_VV_1_PRIME3][im];

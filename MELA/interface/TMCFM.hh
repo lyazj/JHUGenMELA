@@ -207,6 +207,7 @@ extern "C" {
     double ghz1_prime5[2]; double ghz2_prime5[2]; double ghz3_prime5[2]; double ghz4_prime5[2]; // q1**4 + q2**4
     double ghz1_prime6[2]; double ghz2_prime6[2]; double ghz3_prime6[2]; double ghz4_prime6[2]; // q1**4 - q2**4
     double ghz1_prime7[2]; double ghz2_prime7[2]; double ghz3_prime7[2]; double ghz4_prime7[2]; // |q1**2| * |q2**2|
+    double ghz1_aux[2]; double ghz2_aux[2]; double ghz3_aux[2]; double ghz4_aux[2]; // No additional q2 dependence
 
     double ghzgs1_prime2[2]; double ghzgs2[2]; double ghzgs3[2]; double ghzgs4[2];
     double ghgsgs2[2]; double ghgsgs3[2]; double ghgsgs4[2];

@@ -452,7 +452,7 @@
                   endif
 
                   if( doInterference ) then
-                      call calcHelAmp2(ordering_swap,VVMode,MY_IDUP,p(1:4,1:6),i3,i4,A_VV(2))
+                      call calcHelAmp2(ordering_swap,VVMode,MY_IDUP,p(1:4,1:6),i3,i4,A_VV(2),.true.)
                       if( includeGammaStar ) then
                           call calcHelAmp2(ordering_swap,ZgsMode,MY_IDUP,p(1:4,1:6),i3,i4,A_VV(4))
                           call calcHelAmp2(ordering_swap,gsZMode,MY_IDUP,p(1:4,1:6),i3,i4,A_VV(6))
@@ -506,12 +506,13 @@
       RETURN
       END SUBROUTINE
 
-   subroutine calcHelAmp2(ordering,VVMode,MY_IDUP,p,i3,i4,A)
+   subroutine calcHelAmp2(ordering,VVMode,MY_IDUP,p,i3,i4,A,use_gaux)
    implicit none
    integer :: ordering(1:4),VVMode,i3,i4,l1,l2,l3,l4,MY_IDUP(6:9)
    real(dp) :: p(1:4,1:6)
    real(dp) :: pin(4,4)
    complex(dp) :: A(1:1), sp(3:4,4)
+   logical,optional :: use_gaux
 
       l1=ordering(1)
       l2=ordering(2)
@@ -527,15 +528,20 @@
                                        -3+2*i3,-3+2*i4,                                             &
                                        sp(3:4,:),pin(3:4,:)                                         &
                                       )
-      call HZZampl(VVMode,pin,sp,A(1))
+      if(present(use_gaux)) then
+         call HZZampl(VVMode,pin,sp,A(1),use_gaux)
+      else
+         call HZZampl(VVMode,pin,sp,A(1))
+      endif
    end subroutine
 
-      subroutine HZZampl(VVMode,p,sp,res)
+      subroutine HZZampl(VVMode,p,sp,res,use_gaux)
       implicit none
       integer, intent(in) :: VVMode
       real(dp), intent(in) :: p(4,4)
       complex(dp), intent(in) :: sp(3:4,4)
       complex(dp), intent(out) :: res
+      logical,optional :: use_gaux
       complex(dp) :: e3_e4
       complex(dp) :: e3_q4,e4_q3
       complex(dp) :: q1(4),q3(4),q4(4),q(4)
@@ -572,10 +578,17 @@
 
 !---- data that defines couplings
       if( (VVMode.eq.ZZMode) .or. (VVMode.eq.WWMode)  ) then! decay ZZ's or WW's
-         ghz1_dyn = HVVSpinZeroDynamicCoupling(1,q3_q3,q4_q4,q_q)
-         ghz2_dyn = HVVSpinZeroDynamicCoupling(2,q3_q3,q4_q4,q_q)
-         ghz3_dyn = HVVSpinZeroDynamicCoupling(3,q3_q3,q4_q4,q_q)
-         ghz4_dyn = HVVSpinZeroDynamicCoupling(4,q3_q3,q4_q4,q_q)
+         if(present(use_gaux)) then
+            ghz1_dyn = HVVSpinZeroDynamicCoupling(1,q3_q3,q4_q4,q_q,.false.,use_gaux)
+            ghz2_dyn = HVVSpinZeroDynamicCoupling(2,q3_q3,q4_q4,q_q,.false.,use_gaux)
+            ghz3_dyn = HVVSpinZeroDynamicCoupling(3,q3_q3,q4_q4,q_q,.false.,use_gaux)
+            ghz4_dyn = HVVSpinZeroDynamicCoupling(4,q3_q3,q4_q4,q_q,.false.,use_gaux)
+         else
+            ghz1_dyn = HVVSpinZeroDynamicCoupling(1,q3_q3,q4_q4,q_q)
+            ghz2_dyn = HVVSpinZeroDynamicCoupling(2,q3_q3,q4_q4,q_q)
+            ghz3_dyn = HVVSpinZeroDynamicCoupling(3,q3_q3,q4_q4,q_q)
+            ghz4_dyn = HVVSpinZeroDynamicCoupling(4,q3_q3,q4_q4,q_q)
+         endif
       elseif( (VVMode.eq.gsZMode) ) then
          ghz1_dyn = HVVSpinZeroDynamicCoupling(5,0d0,q3_q3,q_q)
          ghz2_dyn = HVVSpinZeroDynamicCoupling(6,0d0,q3_q3,q_q)

@@ -416,6 +416,11 @@ real(8), public, parameter :: Lambda2 = 1000d0    *GeV      ! for second resonan
    complex(8), public :: ghz4_prime6= (0d0,0d0)
    complex(8), public :: ghz4_prime7= (0d0,0d0)
 
+   complex(8), public :: ghz1_aux = (2.0d0,0d0) ! SM=2 (MCFM => =1)
+   complex(8), public :: ghz2_aux = (0d0,0d0)
+   complex(8), public :: ghz3_aux = (0d0,0d0)
+   complex(8), public :: ghz4_aux = (0d0,0d0)   ! pseudoscalar
+
    complex(8), public :: ghzgs1_prime2= (0d0,0d0)
    complex(8), public :: ghzgs2  = (0d0,0d0)
    complex(8), public :: ghzgs3  = (0d0,0d0)
@@ -1157,11 +1162,12 @@ integer, public :: ijPartons(1:2)=0
 CONTAINS
 
 
-function HVVSpinZeroDynamicCoupling (index,sWplus,sWminus,sWW,tryWWcoupl)
+function HVVSpinZeroDynamicCoupling (index,sWplus,sWminus,sWW,tryWWcoupl,use_gaux)
 integer, intent(in) :: index
 real(8), intent(in) :: sWplus, sWminus, sWW
 real(8) :: sWplus_signed, sWminus_signed, sWW_signed, QsqCompoundFactor
 logical,optional :: tryWWcoupl
+logical,optional :: use_gaux
 complex(8) :: HVVSpinZeroDynamicCoupling
 complex(8) :: vvcoupl(1:8)
 real(8) :: lambda_v
@@ -1187,18 +1193,38 @@ logical :: computeQsqCompundCoupl
       if(cz_q1sq.ne.0 .or. cz_q2sq.ne.0 .or. cz_q12sq.ne.0) computeQsqCompundCoupl=.true.
       if(index.eq.1) then ! ZZ 1-4
          vvcoupl = (/ ghz1, ghz1_prime, ghz1_prime2, ghz1_prime3, ghz1_prime4, ghz1_prime5, ghz1_prime6, ghz1_prime7 /)
+         if(present(use_gaux)) then
+            if(use_gaux) then
+               vvcoupl = (/ ghz1_aux, ghz1_prime, ghz1_prime2, ghz1_prime3, ghz1_prime4, ghz1_prime5, ghz1_prime6, ghz1_prime7 /)
+            end if
+         end if
          lambda_v = Lambda_z1
          lambda_v120 = (/ Lambda_z11, Lambda_z12, Lambda_z10 /)
       elseif(index.eq.2) then
          vvcoupl = (/ ghz2, ghz2_prime, ghz2_prime2, ghz2_prime3, ghz2_prime4, ghz2_prime5, ghz2_prime6, ghz2_prime7 /)
+         if(present(use_gaux)) then
+            if(use_gaux) then
+               vvcoupl = (/ ghz2_aux, ghz2_prime, ghz2_prime2, ghz2_prime3, ghz2_prime4, ghz2_prime5, ghz2_prime6, ghz2_prime7 /)
+            end if
+         end if
          lambda_v = Lambda_z2
          lambda_v120 = (/ Lambda_z21, Lambda_z22, Lambda_z20 /)
       elseif(index.eq.3) then
          vvcoupl = (/ ghz3, ghz3_prime, ghz3_prime2, ghz3_prime3, ghz3_prime4, ghz3_prime5, ghz3_prime6, ghz3_prime7 /)
+         if(present(use_gaux)) then
+            if(use_gaux) then
+               vvcoupl = (/ ghz3_aux, ghz3_prime, ghz3_prime2, ghz3_prime3, ghz3_prime4, ghz3_prime5, ghz3_prime6, ghz3_prime7 /)
+            end if
+         end if
          lambda_v = Lambda_z3
          lambda_v120 = (/ Lambda_z31, Lambda_z32, Lambda_z30 /)
       elseif(index.eq.4) then
          vvcoupl = (/ ghz4, ghz4_prime, ghz4_prime2, ghz4_prime3, ghz4_prime4, ghz4_prime5, ghz4_prime6, ghz4_prime7 /)
+         if(present(use_gaux)) then
+            if(use_gaux) then
+               vvcoupl = (/ ghz4_aux, ghz4_prime, ghz4_prime2, ghz4_prime3, ghz4_prime4, ghz4_prime5, ghz4_prime6, ghz4_prime7 /)
+            end if
+         end if
          lambda_v = Lambda_z4
          lambda_v120 = (/ Lambda_z41, Lambda_z42, Lambda_z40 /)
       elseif(index.eq.5) then ! Zgs 1

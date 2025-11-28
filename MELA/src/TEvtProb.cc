@@ -500,7 +500,7 @@ double TEvtProb::XsecCalc_XVV(){
 
     // 0m+
     if (process == TVar::HSMHiggs){
-      Hvvcoupl[gHIGGS_VV_1][0]=1.;
+      Hvvcoupl[gHIGGS_VV_1][0] = Hvvcoupl[gHIGGS_VV_1_aux][0] = 1.;
       isSpinZero = true;
     }
     // 0+L1
@@ -833,7 +833,7 @@ double TEvtProb::XsecCalcXJJ(){
       for (int ic=0; ic<SIZE_HVV_LAMBDAQSQ; ic++){ for (int ik=0; ik<SIZE_HVV_CQSQ; ik++){ HzzLambda_qsq[ic][ik]=100.; HwwLambda_qsq[ic][ik]=100.; } }
       SetJHUGenDistinguishWWCouplings(false);
 
-      if (process == TVar::HSMHiggs){ Hzzcoupl[gHIGGS_VV_1][0] = 1.; Hwwcoupl[gHIGGS_VV_1][0] = 1.; }
+      if (process == TVar::HSMHiggs){ Hzzcoupl[gHIGGS_VV_1][0] = 1.; Hwwcoupl[gHIGGS_VV_1][0] = 1.; Hzzcoupl[gHIGGS_VV_1_aux][0] = 1.; }
       else if (process == TVar::H0_g1prime2){ Hzzcoupl[gHIGGS_VV_1_PRIME2][0] = 1.; Hwwcoupl[gHIGGS_VV_1_PRIME2][0] = 1.; }
       else if (process == TVar::H0hplus){ Hzzcoupl[gHIGGS_VV_2][0] = 1.; Hwwcoupl[gHIGGS_VV_2][0] = 1.; }
       else if (process == TVar::H0minus){ Hzzcoupl[gHIGGS_VV_4][0] = 1.; Hwwcoupl[gHIGGS_VV_4][0] = 1.; }
@@ -939,7 +939,7 @@ double TEvtProb::XsecCalc_VX(
 
     for (int ic=0; ic<SIZE_HVV_LAMBDAQSQ; ic++){ for (int ik=0; ik<SIZE_HVV_CQSQ; ik++) HvvLambda_qsq[ic][ik]=100.; }
 
-    if (process == TVar::HSMHiggs) Hvvcoupl[gHIGGS_VV_1][0] = 1.;
+    if (process == TVar::HSMHiggs) Hvvcoupl[gHIGGS_VV_1][0] = Hvvcoupl[gHIGGS_VV_1_aux][0] = 1.;
     else if (process == TVar::H0_g1prime2) Hvvcoupl[gHIGGS_VV_1_PRIME2][0] = 1.;
     else if (process == TVar::H0hplus) Hvvcoupl[gHIGGS_VV_2][0] = 1.;
     else if (process == TVar::H0minus) Hvvcoupl[gHIGGS_VV_4][0] = 1.;
